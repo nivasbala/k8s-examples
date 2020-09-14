@@ -1,0 +1,101 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: websrv-homepage
+  namespace: websrv 
+data:
+  index.html: |
+    <html>
+    <head><title>K3S! - Home</title>
+      <style>
+        html {
+          font-size: 62.5%;
+        }
+        body {
+          font-family: sans-serif;
+          background-color: pink;
+          color: white;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          height: 100vh;
+        }
+        div {
+          text-align: center;
+          font-size: 8rem;
+          text-shadow: 3px 3px 4px dimgrey;
+        }
+      </style>
+    </head>
+    <body>
+      <div>Hello from K3S! - Home</div>
+    </body>
+    </html>
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: websrv-service1
+  namespace: websrv 
+data:
+  index.html: |
+    <html>
+    <head><title>K3S! - Service 1</title>
+      <style>
+        html {
+          font-size: 62.5%;
+        }
+        body {
+          font-family: sans-serif;
+          background-color: green;
+          color: white;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          height: 100vh;
+        }
+        div {
+          text-align: center;
+          font-size: 8rem;
+          text-shadow: 3px 3px 4px dimgrey;
+        }
+      </style>
+    </head>
+    <body>
+      <div>Hello from K3S! - Service 1</div>
+    </body>
+    </html>
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: websrv-service2
+  namespace: websrv
+data:
+  index.html: |
+    <html>
+    <head><title>K3S! - Service 2</title>
+      <style>
+        html {
+          font-size: 62.5%;
+        }
+        body {
+          font-family: sans-serif;
+          background-color: blue;
+          color: white;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          height: 100vh;
+        }
+        div {
+          text-align: center;
+          font-size: 8rem;
+          text-shadow: 3px 3px 4px dimgrey;
+        }
+      </style>
+    </head>
+    <body>
+      <div>Hello from K3S! - Service 2</div>
+    </body>
+    </html>

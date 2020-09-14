@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: websrv
+  labels: 
+    app: websrv
+  namespace: websrv
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: websrv
+  template:
+    metadata:
+      labels:
+        app: websrv
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: homepage
+          mountPath: /usr/share/nginx/html/
+        - name: service1
+          mountPath: /usr/share/nginx/html/service1/
+        - name: service2
+          mountPath: /usr/share/nginx/html/service2/
+        - name: nginx-config
+          mountPath: /etc/nginx/
+          readOnly: true
+      volumes:
+      - name: homepage
+        configMap:
+          name: websrv-homepage
+      - name: service1
+        configMap:
+          name: websrv-service1
+      - name: service2
+        configMap:
+          name: websrv-service2
+      - name: nginx-config
+        configMap:
+          name: websrv-config
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: websrv-svc
+  namespace: websrv
+spec:
+  selector:
+    app: websrv
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+
