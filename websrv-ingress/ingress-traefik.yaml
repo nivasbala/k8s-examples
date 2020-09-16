@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+#apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: traefik-ingress
+#  namespace: websrv
+  annotations:
+     kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+    - http:
+        paths:
+        - path: /
+          backend:
+            serviceName: websrv-main
+            servicePort: 80
+        - path: /s1
+          backend:
+            serviceName: websrv-s1
+            servicePort: 80
+        - path: /s2
+          backend:
+            serviceName: websrv-s2
+            servicePort: 80

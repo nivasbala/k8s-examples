@@ -1,0 +1,142 @@
+apiVersion: v1
+kind: Service
+metadata: 
+  name: websrv-s2
+#  namespace: websrv
+spec:
+  selector:
+    app: websrv-s2
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: websrv-config-s2
+#  namespace: websrv 
+data:
+  nginx.conf: |
+    
+    user nginx;
+    worker_processes 1;
+    error_log /var/log/nginx/error.log;
+    pid /run/nginx.pid;
+    
+    events {
+        worker_connections 1024;
+    }
+    
+    http {
+        log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                          '$status $body_bytes_sent "$http_referer" '
+                          '"$http_user_agent" "$http_x_forwarded_for"';
+    
+        access_log  /var/log/nginx/access.log  main;
+    
+        sendfile            on;
+        tcp_nopush          on;
+        tcp_nodelay         on;
+        keepalive_timeout   65;
+        types_hash_max_size 2048;
+    
+        default_type        application/octet-stream;
+    
+        include /etc/nginx/conf.d/*.conf;
+    
+        server {
+   
+           listen       80 default_server;
+           listen       [::]:80 default_server;
+           server_name  _;
+           root         /usr/share/nginx/html;
+           
+           # Load configuration files for the default server block.
+           include /etc/nginx/default.d/*.conf;
+           
+           location /s2/ {
+           }
+           
+           error_page 404 /404.html;
+               location = /40x.html {
+           }
+           
+           error_page 500 502 503 504 /50x.html;
+               location = /50x.html {
+           }
+        }
+    }
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: websrv-page-s2
+#  namespace: websrv 
+data:
+  index.html: |
+    <html>
+    <head><title>K3S! - Service 2</title>
+      <style>
+        html {
+          font-size: 62.5%;
+        }
+        body {
+          font-family: sans-serif;
+          background-color: orange;
+          color: white;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          height: 100vh;
+        }
+        div {
+          text-align: center;
+          font-size: 8rem;
+          text-shadow: 3px 3px 4px dimgrey;
+        }
+      </style>
+    </head>
+    <body>
+      <div>Hello from K3S! - Service 2</div>
+    </body>
+    </html>
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: websrv-s2
+  labels: 
+    app: websrv-s2
+#  namespace: websrv
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: websrv-s2
+  template:
+    metadata:
+      labels:
+        app: websrv-s2
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: config-s2
+          mountPath: /etc/nginx/
+          readOnly: true
+        - name: s2
+          mountPath: /usr/share/nginx/html/s2/
+      volumes:
+        - name: config-s2
+          configMap:
+            name: websrv-config-s2
+        - name: s2
+          configMap:
+            name: websrv-page-s2
+
