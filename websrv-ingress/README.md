@@ -66,4 +66,12 @@
 
 ## 2. Nginx Ingress Install
 
+ - Step 1: Apply nginx-ing-install.yaml
+   - Installs Nginx Ingress Controller in NS ingress-nginx
+   - Creates, RBAC, Deployment, Svc etc.,
+ - Step 2: Apply ingress-nginx.yaml
+   - Creates Ingress Path
+ - Step 3: Apply websrv files
+   - Webserver
+
 
