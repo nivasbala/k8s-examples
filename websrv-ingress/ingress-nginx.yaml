@@ -5,6 +5,10 @@ metadata:
   name: nginx-ingress
   annotations:
      kubernetes.io/ingress.class: "nginx"
+     nginx.ingress.kubernetes.io/affinity: "cookie"
+     nginx.ingress.kubernetes.io/session-cookie-name: "route"
+     nginx.ingress.kubernetes.io/session-cookie-expires: "129600"
+     nginx.ingress.kubernetes.io/session-cookie-max-age: "129600"
 spec:
   rules:
   - http:
