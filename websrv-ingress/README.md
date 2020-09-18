@@ -16,6 +16,15 @@
      1. nginx-ing-install.yaml: This is from Oracle's website (installed under ingress-nginx)
         - Creates, RBAC, Nginx Deployment, service etc.,
      2. ingress-nginx.yaml: Creates path based routes for main, s1 and s2 using nginx ingress controller
+   - Cookie Persistence
+     1. hello-world-ing-cookie.yaml
+        - Added cookie field to ingress definition for nginx
+        - The cookie need to be specified in curl **(curl -b route=12345 <nginx ing svc IP>)**
+          - When a backend is hit, that session affinity will be maintained everytime
+          - Without the cookie (without -b) replicas will be hit in round-robin
+     2. hello-world.yaml
+        - Simple deployment (with 3 replicas) which displays the container id
+        - [Scott Baldwin Hello World](https://github.com/scottsbaldwin/docker-hello-world)
 
 ## 1. Traefik Based Ingress
 
@@ -68,10 +77,23 @@
 
  - Step 1: Apply nginx-ing-install.yaml
    - Installs Nginx Ingress Controller in NS ingress-nginx
+   - Added Load balancer shape parameter (other params can be added)
    - Creates, RBAC, Deployment, Svc etc.,
  - Step 2: Apply ingress-nginx.yaml
    - Creates Ingress Path
  - Step 3: Apply websrv files
    - Webserver
 
+## 3. Cookie Persistence
+
+  - Step 1: Install nginx-ing-install.yaml (same as above)
+  - Step 2: Install Ingress (hello-world-ing-cookie.yaml)
+  - step 3: Install Deployment (hello-world.yaml)
+  - Step 4: Curl to access cookie based access (cookie name is  <u>**route**</u>)
+    - Cookie set using -b (cookie will be set in the client browser)
+      - When hit will cookie, it will always go to the same backend (session affinity)
+      ```
+          curl -b route=12345 <nginx-ing-svc-ip>
+      ```
+      - When hit without cookie, it will go to any of the replicas in round-robin
 

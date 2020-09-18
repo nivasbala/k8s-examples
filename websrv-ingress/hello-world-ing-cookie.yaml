@@ -1,0 +1,32 @@
+# READ THIS
+# 1. Usage
+#  This was taken from Oracle's Nginx Install Example
+#  Uses docker hello world with 3 replicas
+#  Enables affinity with cookies
+#  Use curl -b <cookie name which is "route">=<some value>
+#  curl -b route=12345 <nginx-ingress-svc-ip>
+#
+# 2. Create the Secret used by Nginx Ingress Controller
+# openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=nginxsvc/O=nginxsvc"
+# kubectl create secret tls tls-secret --key tls.key --cert tls.crt
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: hello-world-ing
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "route"
+    nginx.ingress.kubernetes.io/session-cookie-expires: "129600"
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "129600"
+spec:
+  tls:
+  - secretName: tls-secret  # This needs to be created (See Comments below)
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: docker-hello-world-svc
+          servicePort: 8088
+
+
