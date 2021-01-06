@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: go-app-tcp-ing
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  tls:
+  - secretName: tls-secret  # This needs to be created (See Comments below)
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: go-app-tcp
+          servicePort: 8080
+
+
