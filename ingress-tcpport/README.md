@@ -111,3 +111,9 @@
   - This is the TCP port and service which is being accessed on a non **HTTP|HTTPS** port
 - For accessing the HTTP based service use <external-ip>/test
   - This is the path provided in the ingress
+- To check inside the ingress controller deployment **`"exec"`** into the pod of the nginx deployment and cat **`"nginx.conf"`**
+  ```
+  kubectl exec -it -n ingress-nginx deploy/nginx-ingress-controller -- cat /etc/nginx/nginx.conf
+  ```
+  - This needs to be done after the K8S ingress manifest object has been created
+  - Will show the TCP port based configuration in the conf file
