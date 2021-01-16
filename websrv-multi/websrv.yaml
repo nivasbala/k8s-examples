@@ -49,6 +49,8 @@ kind: Service
 metadata: 
   name: websrv-svc
   namespace: websrv
+  annotations:
+    service.beta.kubernetes.io/oci-load-balancer-shape: "10Mbps"
 spec:
   selector:
     app: websrv

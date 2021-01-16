@@ -12,7 +12,7 @@
   $ kubectl create ns websrv
 
   # Apply the yaml configs
-  $ kubeclt apply -f cm-context.yaml -f cm-config.yaml -f websrv.yaml
+  $ kubectl apply -f cm-config.yaml -f cm-content.yaml -f websrv.yaml
   ```
 - To Look at the output of the LB web page from a browser type
   - <lb-public-ip>/  - This take you to home
